@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Paintings Online - Account Info</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+    <th:block th:include="/_header"></th:block>
+    <style>
+        /* CSS cho trang account info */
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .account-container {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .account-container ul {
+            list-style: none;
+            padding: 0;
+        }
+        .account-container li {
+            margin-bottom: 10px;
+        }
+        .account-container li span {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .account-container ul ul {
+            margin-top: 5px;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <th:block th:include="/_menu"></th:block>
+    <div class="container">
+        <div class="page-title">Account Info</div>
+        <div class="account-container">
+            <ul>
+                <li>User Name: <span th:utext="${#request.userPrincipal.name}"></span></li>
+                <li>
+                    Role:
+                    <ul>
+                        <li th:each="auth : ${userDetails.authorities}" th:utext="${auth.authority}"></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <th:block th:include="/_footer"></th:block>
+</body>
+</html>

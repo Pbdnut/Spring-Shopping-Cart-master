@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Paintings Online</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+
+        .page-title {
+            font-size: 28px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .customer-info-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .customer-info-container h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .customer-info-container ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .customer-info-container ul li {
+            margin-bottom: 10px;
+            color: #777;
+        }
+
+        .container .product-preview-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .container .product-preview-container ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container .product-preview-container ul li {
+            margin-bottom: 10px;
+            color: #777;
+        }
+
+        .product-image {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+
+        .button-send-sc {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button-send-sc:hover {
+            background-color: #45a049;
+        }
+
+        .navi-item {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 16px;
+        }
+
+        .navi-item:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+    <th:block th:include="/_header"></th:block>
+</head>
+<body>
+<th:block th:include="/_menu"></th:block>
+
+<div class="container">
+    <div class="page-title">Confirmation</div>
+    <div class="customer-info-container">
+        <h3>Customer Information:</h3>
+        <ul>
+            <li>Name: <span th:utext="${myCart.customerInfo.name}"></span></li>
+            <li>Email: <span th:utext="${myCart.customerInfo.email}"></span></li>
+            <li>Phone: <span th:utext="${myCart.customerInfo.phone}"></span></li>
+            <li>Address: <span th:utext="${myCart.customerInfo.address}"></span></li>
+        </ul>
+        <h3>Cart Summary:</h3>
+        <ul>
+            <li>Quantity: <span th:utext="${myCart.quantityTotal}"></span></li>
+            <li>Total:
+                <span class="total"
+                      th:utext="${#numbers.formatDecimal(myCart.amountTotal,3,2,'COMMA')}">
+                </span> VND
+            </li>
+        </ul>
+    </div>
+    <form method="POST" th:action="@{/shoppingCartConfirmation}">
+        <!-- Edit Cart -->
+        <a class="navi-item" th:href="@{/shoppingCart}">
+            Edit Cart
+        </a>
+        <!-- Edit Customer Info -->
+        <a class="navi-item" th:href="@{/shoppingCartCustomer}">
+            Edit Customer Info
+        </a>
+        <!-- Send/Save -->
+        <input type="submit" value="Send" class="button-send-sc" />
+    </form>
+    <div class="container">
+        <div class="product-preview-container" th:each="cartLineInfo : ${myCart.cartLines}">
+            <ul>
+                <li>
+                    <img class="product-image"
+                         src="@{|/productImage?code=${cartLineInfo.productInfo.code}|}" />
+                </li>
+                <li>
+                    Code: <span th:utext="${cartLineInfo.productInfo.code}"></span>
+                    <input
+                            type="hidden" name="code" th:value="${cartLineInfo.productInfo.code}" />
+                </li>
+                <li>Name: <span th:utext="${cartLineInfo.productInfo.name}"></span></li>
+                <li>Price:
+                    <span class="price"
+                          th:utext="${#numbers.formatDecimal(cartLineInfo.productInfo.price,3,2,'COMMA')}">
+                    </span> VND 
+                </li>
+                <li>Quantity: <span th:utext="${cartLineInfo.quantity}"></span></li>
+                <li>Subtotal:
+                    <span class="subtotal"
+                          th:utext="${#numbers.formatDecimal(cartLineInfo.amount,3,2,'COMMA')}">
+                    </span> VND
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <th:block th:include="/_footer"></th:block>
+
+</body>
+</html>
